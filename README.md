@@ -5,7 +5,7 @@ A small, simple ACRA backend written in Rust.
 It does the following:
 
 - Append report to `crashes.txt` file
-- Send an e-mail with the stack trace
+- Send an e-mail with some crash information and the stack trace
 
 ## Configuration
 

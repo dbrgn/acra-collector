@@ -94,12 +94,23 @@ impl middleware::Handler for ReportHandler {
         println!("  -> Report ID is {}", report.REPORT_ID);
 
         // Create and send e-mail
+        let mut email_text = String::new();
+        email_text.push_str("A new crash happened:\r\n\r\n");
+        email_text.push_str(&format!("- Report ID: {}\r\n", report.REPORT_ID));
+        email_text.push_str(&format!("- Version: {} ({})\r\n", report.APP_VERSION_NAME, report.APP_VERSION_CODE));
+        email_text.push_str(&format!("- Android version: {}\r\n", report.ANDROID_VERSION));
+        if !report.CUSTOM_DATA.is_empty() {
+            email_text.push_str("\r\nCustom data:\r\n\r\n");
+            for (key, val) in &report.CUSTOM_DATA {
+                email_text.push_str(&format!("  {} = {}\r\n", &key, &val));
+            }
+        }
+        email_text.push_str(&format!("\r\nStack trace:\r\n\r\n{}", report.STACK_TRACE));
         let email_option = EmailBuilder::new()
             .to(&*self.config.email_to)
             .from(&*self.config.email_from)
             .subject(&format!("New crash of {} ({})", report.PACKAGE_NAME, report.APP_VERSION_NAME))
-            .text(&format!("A new crash happened:\r\n\r\n- Report ID: {}\r\n- Version: {} ({})\r\n- Android version: {}\r\n\r\nStack trace:\r\n\r\n{}",
-                           report.REPORT_ID, report.APP_VERSION_NAME, report.APP_VERSION_CODE, report.ANDROID_VERSION, report.STACK_TRACE))
+            .text(&email_text)
             .build();
         match email_option {
             Ok(email) => {
