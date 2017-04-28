@@ -24,8 +24,6 @@ use lettre::transport::smtp::{SecurityLevel, SmtpTransportBuilder};
 use router::Router;
 use serde_json::Value;
 
-type Object = HashMap<String, Value>;
-
 #[derive(Deserialize, Debug, Clone)]
 struct Config {
     host: String,
@@ -41,46 +39,13 @@ struct Config {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 #[allow(non_snake_case)]
 struct Report {
-    REPORT_ID: String,
-
     ANDROID_VERSION: String,
-    APPLICATION_LOG: Option<String>,
     APP_VERSION_CODE: u64,
     APP_VERSION_NAME: String,
-    AVAILABLE_MEM_SIZE: u64,
-    BRAND: String,
-    BUILD: Object,
-    BUILD_CONFIG: Option<Object>,
-    CRASH_CONFIGURATION: Object,
-    CUSTOM_DATA: Object,
-    DEVICE_FEATURES: Object,
-    DEVICE_ID: Option<String>,
-    DISPLAY: Object,
-    DROPBOX: Option<String>,
-    DUMPSYS_MEMINFO: String,
-    ENVIRONMENT: Object,
-    EVENTSLOG: Option<String>,
-    FILE_PATH: String,
-    INITIAL_CONFIGURATION: Object,
-    INSTALLATION_ID: String,
-    IS_SILENT: bool,
-    LOGCAT: String,
-    MEDIA_CODEC_LIST: Option<Object>,
+    CUSTOM_DATA: HashMap<String, Value>,
     PACKAGE_NAME: String,
-    PHONE_MODEL: String,
-    PRODUCT: String,
-    RADIOLOG: Option<String>,
-    SETTINGS_GLOBAL: Option<Object>,
-    SETTINGS_SECURE: Option<Object>,
-    SETTINGS_SYSTEM: Option<Object>,
-    SHARED_PREFERENCES: Object,
+    REPORT_ID: String,
     STACK_TRACE: String,
-    THREAD_DETAILS: Option<String>,
-    TOTAL_MEM_SIZE: u64,
-    USER_APP_START_DATE: String,
-    USER_COMMENT: Option<String>,
-    USER_CRASH_DATE: String,
-    USER_EMAIL: String,
 }
 
 struct ReportHandler {
