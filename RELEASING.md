@@ -4,6 +4,7 @@ Set variables:
 
     export VERSION=X.Y.Z
     export GPG_KEY=EA456E8BAF0109429583EED83578F667F2F3A5FA
+    export RELEASEDIR=acra-collector-v${VERSION}
 
 Update version numbers:
 
@@ -17,8 +18,12 @@ Commit & tag:
 Build & sign:
 
     ./build-debian.sh
-    strip target/release-debian/acra-collector
-    gpg -o target/release-debian/acra-collector.sig --detach-sig target/release-debian/acra-collector
+    mkdir -p builds && cd builds
+    cp -Rv ../target/release-debian $RELEASEDIR
+    strip $RELEASEDIR/acra-collector
+    gpg -o $RELEASEDIR/acra-collector.sig --detach-sig $RELEASEDIR/acra-collector
+    tar cfvz acra-collector-v${VERSION}-debian8.tar.gz $RELEASEDIR
+    cd ..
 
 Push:
 
