@@ -22,6 +22,13 @@ Create a `config.json` with the following fields:
 
 The SMTP server must support STARTTLS.
 
+## Builds
+
+You can download binary builds for Debian 8 on the
+[releases](https://github.com/dbrgn/acra-collector/releases) page.
+
+All releases are signed with [my PGP key](https://keybase.io/dbrgn).
+
 ## Building
 
 You can build the program yourself with a recent version of Rust:

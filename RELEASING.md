@@ -17,7 +17,7 @@ Commit & tag:
 Build & sign:
 
     ./build-debian.sh
-    gpg -o target/release-debian/acra-collector.sig --sign target/release-debian/acra-collector
+    gpg -o target/release-debian/acra-collector.sig --detach-sig target/release-debian/acra-collector
 
 Push:
 
