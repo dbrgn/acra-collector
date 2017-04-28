@@ -1,0 +1,13 @@
+[package]
+name = "acra-collector"
+version = "0.1.0"
+authors = ["Danilo Bargen <mail@dbrgn.ch>"]
+
+[dependencies]
+env_logger = "0.4"
+iron = "0.5"
+lettre = "0.6"
+router = "0.5"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
