@@ -145,7 +145,7 @@ impl middleware::Handler for ReportHandler {
 }
 
 fn main() {
-    env_logger::init().unwrap();
+    env_logger::init();
 
     // Load config
     let file = File::open("config.json").unwrap();
