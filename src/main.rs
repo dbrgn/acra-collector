@@ -18,9 +18,16 @@ use std::io::{Read, Write};
 
 use iron::prelude::*;
 use iron::{middleware, status};
-use lettre::email::EmailBuilder;
-use lettre::transport::EmailTransport;
-use lettre::transport::smtp::{SecurityLevel, SmtpTransportBuilder};
+use lettre::{
+    Message,
+    Transport,
+    transport::smtp::{
+        authentication::Credentials,
+        client::net::TlsParameters,
+        SmtpTransport,
+        Tls,
+    },
+};
 use router::Router;
 use serde_json::Value;
 
@@ -106,31 +113,30 @@ impl middleware::Handler for ReportHandler {
             }
         }
         email_text.push_str(&format!("\r\nStack trace:\r\n\r\n{}", report.STACK_TRACE));
-        let email_option = EmailBuilder::new()
-            .to(&*self.config.email_to)
-            .from(&*self.config.email_from)
+        let email_result = Message::builder()
+            .from(self.config.email_from.parse().unwrap())
+            .to(self.config.email_to.parse().unwrap())
             .subject(&format!("New crash of {} ({})", report.PACKAGE_NAME, report.APP_VERSION_NAME))
-            .text(&email_text)
-            .build();
-        match email_option {
+            .body(&email_text);
+        match email_result {
             Ok(email) => {
-                match SmtpTransportBuilder::new((&*self.config.smtp_host, self.config.smtp_port))
-                        .map(|t| t.credentials(&*self.config.smtp_user, &*self.config.smtp_pass))
-                        .map(|t| t.security_level(SecurityLevel::AlwaysEncrypt))
-                        .map(|t| t.smtp_utf8(true))
-                        .map(|t| t.connection_reuse(true))
-                        .map(|t| t.build()) {
-                    Ok(mut mailer) => match mailer.send(email) {
-                        Ok(_) => {},
-                        Err(e) => {
-                            println!("Could not send email: {:?}", e);
-                            return Ok(Response::with(status::InternalServerError));
-                        },
-                    },
+                let mut tls_config = rustls::ClientConfig::default();
+                tls_config.enable_tickets = false;
+                tls_config.root_store.add_server_trust_anchors(&webpki_roots::TLS_SERVER_ROOTS);
+                let transport = SmtpTransport::builder(&*self.config.smtp_host)
+                    .port(self.config.smtp_port)
+                    .credentials(Credentials::new(self.config.smtp_user.clone(), self.config.smtp_pass.clone()))
+                    .tls(Tls::Required(TlsParameters::new(
+                        self.config.smtp_host.clone(),
+                        tls_config
+                    )))
+                    .build();
+                match transport.send(&email) {
+                    Ok(_) => {},
                     Err(e) => {
-                        println!("Could not connect to SMTP server: {:?}", e);
+                        println!("Could not send email: {:?}", e);
                         return Ok(Response::with(status::InternalServerError));
-                    }
+                    },
                 };
             },
             Err(e) => {
