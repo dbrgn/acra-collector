@@ -160,5 +160,7 @@ fn main() {
     let mut router = Router::new();
     router.post("/report", ReportHandler { config: config.clone() }, "report");
     println!("Starting server on {}:{}...", config.host, config.port);
-    Iron::new(router).http(&format!("{}:{}", config.host, config.port)).unwrap();
+    let mut iron = Iron::new(router);
+    iron.threads = 4;
+    iron.http(&format!("{}:{}", config.host, config.port)).unwrap();
 }
