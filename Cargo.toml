@@ -1,6 +1,6 @@
 [package]
 name = "acra-collector"
-version = "0.2.0-dev"
+version = "0.2.0"
 authors = ["Danilo Bargen <mail@dbrgn.ch>"]
 repository = "https://github.com/dbrgn/acra-collector/"
 homepage = "https://github.com/dbrgn/acra-collector/"
