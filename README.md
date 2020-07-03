@@ -24,7 +24,7 @@ The SMTP server must support STARTTLS.
 
 ## Builds
 
-You can download binary builds for Debian 8 on the
+You can download binary builds for Debian 10 on the
 [releases](https://github.com/dbrgn/acra-collector/releases) page.
 
 All releases are signed with [my PGP key](https://keybase.io/dbrgn).
@@ -37,8 +37,8 @@ You can build the program yourself with a recent version of Rust:
 
 The binary is now at `target/release/acra-collector`.
 
-If you want a binary compiled for Debian 8 (with OpenSSL linked in
-dynamically), you can use the `build-debian.sh` script.
+If you want a binary compiled for Debian 10, you can use the `build-debian.sh`
+script.
 
 I don't provide static binaries since I want the binary to link against the
 system OpenSSL for update security reasons. If you want, you could build your

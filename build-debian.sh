@@ -2,7 +2,7 @@
 # Build a binary for Debian
 set -e
 
-echo "Building acra-collector for Debian 8..."
+echo "Building acra-collector for Debian 10..."
 docker build . -t acra-collector-debian
 id=$(docker create acra-collector-debian)
 mkdir -p target/release-debian
