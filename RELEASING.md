@@ -23,7 +23,7 @@ Build & sign:
     strip $RELEASEDIR/acra-collector
     gpg -o $RELEASEDIR/acra-collector.sig --detach-sig $RELEASEDIR/acra-collector
     cp ../LICENSE-MIT ../LICENSE-APACHE $RELEASEDIR/
-    tar cfvz acra-collector-v${VERSION}-debian8.tar.gz $RELEASEDIR
+    tar cfvz acra-collector-v${VERSION}-debian10.tar.gz $RELEASEDIR
     cd ..
 
 Push:
